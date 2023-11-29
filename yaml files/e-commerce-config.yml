@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: service-config
+data:
+  billingServiceBaseUrl: "http://billing-service:8080"
+  mongoUrl : mongodb://mongodb-service:27017/billing

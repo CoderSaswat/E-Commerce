@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: billing-service-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: billing-service
+  template:
+    metadata:
+      labels:
+        app: billing-service
+    spec:
+      containers:
+        - name: billing-service
+          image: saswatcloud/billing-service:2.0
+          ports:
+            - containerPort: 8080
+          env:
+#          - name: USERNAME
+#            valueFrom:
+#              secretKeyRef:
+#                name: mongodb-secret
+#                key: username
+#          - name: PASSWORD
+#            valueFrom:
+#              secretKeyRef:
+#                name: mongodb-secret
+#                key: password
+          - name: MONGO_URL
+            value: mongodb://mongodb-service:27017/billing
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: billing-service
+spec:
+  selector:
+    app: billing-service
+  ports:
+    - protocol: TCP
+      port: 8080
+      targetPort: 8080
+  type: ClusterIP
